@@ -50,7 +50,7 @@ const Home: NextPage = () => {
               colorScheme="orange"
               onClick={addCommand}
             >
-              Add new command
+              START
             </LinkButton>
           </VStack>
         </Box>

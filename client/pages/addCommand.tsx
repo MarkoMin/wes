@@ -44,6 +44,7 @@ const AddCommand: NextPage = () => {
             </VStack>
           )}
         </Box>
+        <Button onClick={home}>Ready for scan...</Button>
       </Box>
     </>
   );

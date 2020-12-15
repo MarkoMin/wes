@@ -11,12 +11,32 @@ app.use(express.static("client/out"));
 var commands = []
 var count = 0;
 
-app.post(`/command`, async (req, res) => {
+//ID predstavlja komandu u string formatu
+app.get(`/command/:decodeType/:value/:state/:bits`, async (req, res) => {
   // ESP8266 šalje komandu u bodyu
   console.log("Writing command into array...")
-  const userData = req.body;
-  console.log(userData)
+  const userData = req.params;
+  const decodeType = userData.decodeType;
+  const value = userData.value;
+  const state = userData.state;
+  const bits = userData.bits;
+
+  const command = {
+    decodeType,
+    value,
+    state,
+    bits,
+  }
+
+  console.log(command)
+
   commands[count++] = userData;
+  res.sendStatus(200);
+});
+
+//Za frontend, dohvacanje postojecih komandi
+app.get("/allCommands",(req,res)=>{
+  res.status(200).send(JSON.stringify(commands));
 });
 
 app.get("/", (req, res) => {

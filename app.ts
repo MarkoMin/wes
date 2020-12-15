@@ -26,6 +26,7 @@ app.get("/", (req, res) => {
 
 app.get("/addCommand", (req, res) => {
   console.log("Returning addCommand.html!");
+  res.send("abc").sendStatus(200);
   res.sendFile(path.join(__dirname, "client/out/addCommand.html"));
 });
 

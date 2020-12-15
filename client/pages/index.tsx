@@ -1,12 +1,18 @@
 import { Box, Heading, VStack, HStack } from "@chakra-ui/core";
 import { LinkButton } from "chakra-next-link";
 import { NextPage } from "next";
+import { useRouter } from "next/router";
 import { useBgColor } from "../hooks/useBgColor";
 
 import { useGoHomeIfLoggedIn } from "../hooks/useGoHomeIfLoggedIn";
 
 const Home: NextPage = () => {
   const bg = useBgColor();
+  const router = useRouter();
+
+  const addCommand = async() => {
+    router.push("/addCommand");
+};
 
   return (
     <>
@@ -42,6 +48,7 @@ const Home: NextPage = () => {
               size="lg"
               transitionDuration="1s"
               colorScheme="orange"
+              onClick={addCommand}
             >
               Add new command
             </LinkButton>

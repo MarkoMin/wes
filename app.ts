@@ -24,4 +24,9 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "client/out/index.html"));
 });
 
+app.get("/addCommand", (req, res) => {
+  console.log("Returning addCommand.html!");
+  res.sendFile(path.join(__dirname, "client/out/addCommand.html"));
+});
+
 export default app;

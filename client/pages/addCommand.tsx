@@ -9,21 +9,15 @@ import { useRouter } from "next/router";
 const AddCommand: NextPage = () => {
   const bg = useBgColor();
   const router = useRouter();
-
+  /*
   useEffect(() => {
     if (localStorage && !localStorage.getItem("token")) {
       router.push("/");
     }
   }, []);
-
-  const logout = async() => {
-    //logging out
-    //send http request for cookie management
-
-    localStorage.removeItem("token");
-      router.push("/");
-    
-    
+*/
+  const home = async() => {
+      router.push("/");  
   };
 
   return (
@@ -44,10 +38,7 @@ const AddCommand: NextPage = () => {
         <Box shadow="md" p="10" w="96%" h="94%" bg={bg} borderRadius="5px">
           {typeof window === "undefined" ? null : (
             <VStack spacing="20">
-              <Logo>
-                <Button onClick={logout}>Logout</Button>
-              </Logo>
-
+                <Button onClick={home}>Done</Button>
               <Heading as="h2" size="xl" fontSize="40px" color="orange.600">
               </Heading>
             </VStack>

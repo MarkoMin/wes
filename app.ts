@@ -74,6 +74,14 @@ Svakih 'x' sekundi ESP šalje request na server.
 Server vraca: wait, scan ili execute
 */
 app.get("/arduino", (req, res) => {
+  res.removeHeader("X-powered-by");
+  res.removeHeader("Set-cookie");
+  res.removeHeader("Date");
+  res.removeHeader("Connection");
+  res.removeHeader("etag");
+  res.setHeader("ETag","")
+  res.setHeader("Content-Type","text/html")
+  
   if (status === "wait") {
     res.status(200).send("wait");
   } else if (status === "scan") {

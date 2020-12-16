@@ -16,7 +16,7 @@ var title = ""
 var globalIndex = -1
 
 //index predstavlja komandu u string formatu
-app.get(`/addCommand/:index`, async (req, res) => {
+app.get("/addCommand/:index", async (req, res) => {
   // ESP8266 šalje komandu u bodyu
   console.log("Writing command into array...")
   const userData = req.params;

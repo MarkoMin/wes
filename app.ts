@@ -66,7 +66,7 @@ app.get("/specify/:response", async (req, res) => {
     executeCommandID = Number(-1)
   }
   globalIndex=-1;
-  setTimeout(() => res.sendStatus(200), 5000);
+  setTimeout(() => res.sendStatus(200), 15000);
 });
 
 /* 
@@ -77,8 +77,10 @@ app.get("/arduino", (req, res) => {
   if (status === "wait") {
     res.status(200).send("wait");
   } else if (status === "scan") {
+    status = "wait"
     res.status(201).send("scan");
   } else if (status === "execute") {
+    status = "wait"
     if (executeCommandID === -1)
       console.error("Execute command ID is not properly set!")
 

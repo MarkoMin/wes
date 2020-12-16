@@ -90,7 +90,7 @@ const AddCommand: NextPage = () => {
       {edit ? (<form>
         <label>
           Naziv:
-          <input type="text" value={value} onChange={handleChange} required />
+          <input  type="text" value={value} onChange={handleChange} required />
         </label>
       </form>): null}
       <Button onClick={handleDone}>{done ? "Snimi komandu" : "Dodaj"}</Button>

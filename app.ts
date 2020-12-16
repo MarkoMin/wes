@@ -7,6 +7,7 @@ const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("client/out"));
+app.set('etag', false);
 
 var commands = []
 var count = 0;
@@ -81,18 +82,19 @@ app.get("/arduino", (req, res) => {
   res.removeHeader("etag");
   res.setHeader("ETag","")
   res.setHeader("Content-Type","text/html")
+  console.log(res.getHeaders())
   
   if (status === "wait") {
-    res.status(200).send("wait");
+    res.status(200).send("$w");
   } else if (status === "scan") {
     status = "wait"
-    res.status(201).send("scan");
+    res.status(201).send("$s");
   } else if (status === "execute") {
     status = "wait"
     if (executeCommandID === -1)
       console.error("Execute command ID is not properly set!")
 
-    res.status(202).send("execute:" + executeCommandID)
+    res.status(202).send("$e:" + executeCommandID)
   }
 })
 

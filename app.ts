@@ -10,34 +10,81 @@ app.use(express.static("client/out"));
 
 var commands = []
 var count = 0;
+var status = "wait"
+var executeCommandID = -1
+var title = ""
+var globalIndex = -1
 
-//ID predstavlja komandu u string formatu
-app.get(`/command/:decodeType/:value/:state/:bits`, async (req, res) => {
+//index predstavlja komandu u string formatu
+app.get(`/addCommand/:index`, async (req, res) => {
   // ESP8266 šalje komandu u bodyu
   console.log("Writing command into array...")
   const userData = req.params;
-  const decodeType = userData.decodeType;
-  const value = userData.value;
-  const state = userData.state;
-  const bits = userData.bits;
+  const index = userData.index;
 
+  console.log("Adding command at index: " + index)
   const command = {
-    decodeType,
-    value,
-    state,
-    bits,
+    index: Number(index),
+    title,
   }
 
-  console.log(command)
-
-  commands[count++] = userData;
-  res.sendStatus(200);
+  globalIndex = Number(index)
+  commands[count++] = command;
+  res.sendStatus(200)
 });
 
-//Za frontend, dohvacanje postojecih komandi
-app.get("/allCommands",(req,res)=>{
+// Za frontend, dohvacanje postojecih komandi
+app.get("/allCommands", (req, res) => {
   res.status(200).send(JSON.stringify(commands));
 });
+
+app.delete("/allCommands",(req,res)=>{
+  commands = []
+  count = 0
+  res.sendStatus(200)
+})
+
+// Za frontend, mijenja globalne varijable
+app.get("/specify/:response", async (req, res) => {
+  const userData = req.params;
+  const response = userData.response;
+  let resp = response.split(":");
+
+  console.log("Setting status to: " + resp[0])
+  status = resp[0];
+
+  if(resp.length === 2){
+    if(status==="scan"){
+      title = resp[1]
+
+    } else {
+    console.log("Setting command index to: "+resp[1])
+    executeCommandID = Number(resp[1])
+  }
+  }else{
+    console.log("Setting command index to: "+-1)
+    executeCommandID = Number(-1)
+  }
+  globalIndex=-1;
+  setTimeout(() => res.sendStatus(200), 5000);
+});
+
+/* 
+Svakih 'x' sekundi ESP šalje request na server.
+Server vraca: wait, scan ili execute
+*/
+app.get("/arduino", (req, res) => {
+  if (status === "wait") {
+    res.status(200).send("wait");
+  } else if (status === "scan") {
+    res.status(201).send("scan");
+  } else if (status === "execute") {
+    if (executeCommandID === -1)
+      console.error("Execute command ID is not properly set!")
+
+    res.status(202).send("execute:" + executeCommandID)
+  }
+})
 
 app.get("/", (req, res) => {
   console.log("Returning index.html!");
@@ -46,7 +93,6 @@ app.get("/", (req, res) => {
 
 app.get("/addCommand", (req, res) => {
   console.log("Returning addCommand.html!");
-  res.send("abc").sendStatus(200);
   res.sendFile(path.join(__dirname, "client/out/addCommand.html"));
 });
 

@@ -15,33 +15,56 @@ const AddCommand: NextPage = () => {
   const [done, setDone] = useState(false);
   const [value, setValue] = useState("")
   
-  useEffect(() => {
+  useEffect(() =>  {
     fetch('/allCommands').then(res=>{
-      setItems(res.json())
+      return res.json()
+    }).then(res => {
+      setItems(res)
       setIsLoading(false);
     }).catch(e=> console.log(e))
   }, []);
 
-  const home = async() => {
-      router.push("/");  
+  const deleteAll = async() => {
+      await fetch(`/allCommands`,{
+        method: "delete"
+      })
+      await fetch('/allCommands').then(res=>{
+        return res.json()
+      }).then(res => {
+        setItems(res)
+      }).catch(e=> console.log(e))
   };
 
   const command= async(com) => {
-    console.log(com)
+    fetch(`/specify/execute:`+com).then(res=>{
+      return res.json()
+    }).catch(e=> console.log(e))
   }
 
   const handleChange = (event) => {
     setValue(event.target.value);
   }
 
-  const handleSubmit =(event) => {
-    //posalji na srv
-    alert('A name was submitted: ' + value);
-    event.preventDefault();
-  }
-
-  const handleDone =() => {
-    //posalji value na srv
+  const handleDone =async () => {
+    if(done){
+      //posalji value na srv
+    setIsLoading(true)
+    await fetch(`/specify/scan:`+value).then(res=>{
+      return res.json()
+    }).catch(e=> console.log(e)) 
+      setValue("")
+    await fetch('/allCommands').then(res=>{
+      return res.json()
+    }).then(res => {
+      setItems(res)
+      setIsLoading(false);
+    }).catch(e=> console.log(e))
+    setEdit(false)
+    setDone(false)
+    } else{
+      setEdit(true)
+    setDone(true)
+    }
   }
 
   return (
@@ -62,18 +85,18 @@ const AddCommand: NextPage = () => {
       >
         <Box shadow="md" p="10" w="96%" h="94%" bg={bg} borderRadius="5px">
         <ul>
-      {items.map((item) => <Box><Button onClick={()=> command(item.command)}>item.Title</Button></Box>)}
+      {items.map((item) => <Box><Button onClick={()=> command(item.index)}>{item.title}</Button></Box>)}
       </ul>
-      {edit ? <form onSubmit={handleSubmit}>
+      {edit ? (<form>
         <label>
           Naziv:
-          <input type="text" value={value} onChange={handleChange} />
+          <input type="text" value={value} onChange={handleChange} required />
         </label>
-        <input type="submit" value="Submit" />
-      </form>: null}
+      </form>): null}
       <Button onClick={handleDone}>{done ? "Snimi komandu" : "Dodaj"}</Button>
+
+      <Button onClick={deleteAll}>Obrisi sve!</Button>
         </Box>
-        <Button onClick={home}>Ready for scan...</Button>
       </Box>
     </>
     )

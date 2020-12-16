@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Box, Button, Heading, Input, Spinner, HStack } from "@chakra-ui/core";
 import { NextPage } from "next";
 import { Logo } from "../components/Logo";
-import LoadingScreen from 'react-loading-screen';
 
 
 import { useBgColor } from "../hooks/useBgColor";
@@ -25,7 +24,6 @@ const AddCommand: NextPage = () => {
       setItems(res)
       setIsLoading(false);
     }).catch(e => console.log(e))
-    setItems([{index:0, title:"test"}, {index:0, title:"test"}, {index:0, title:"test"}])
   }, []);
 
   const deleteAll = async () => {
@@ -104,7 +102,7 @@ const AddCommand: NextPage = () => {
             justifyContent="center"
             alignItems="center"
           >
-            <Box d="flex" alignItems="baseline" flexDirection="column">
+            <Box d="flex" alignItems="center" justifyContent="space-around" flexDirection="column">
               <Box
                 flexDirection="row">
                 <HStack spacing="24px">
@@ -114,16 +112,20 @@ const AddCommand: NextPage = () => {
                     lineHeight="tight"
                     isTruncated
                   >
-                    <Button style={{ margin: 20, color: 'black', background: '#e5e5e5', width:100, height:80, fontSize:30, borderRadius:30, borderColor:'black', borderWidth:1 }} onClick={() => command(item.index)}>{item.title}</Button>
+                    <Button size="lg" colorScheme="teal" variant="outline" onClick={() => command(item.index)}>{item.title}</Button>
                   </Box>)}
                   </HStack>
               </Box>
               {edit ? (
                 <Input
-                  placeholder="Unesite ime komande" size="lg"
+                  placeholder="Unesite ime komande" 
+                  size="lg"
+                  isFullWidth={false}
                   isRequired={true}
                   value={value}
                   onChange={handleChange}
+                  style={{margin:20}}
+                  width="25vw"
                   >
                 </Input>
               ) : null}
@@ -136,7 +138,7 @@ const AddCommand: NextPage = () => {
                 isTruncated
               >
                 <Button style={!done ? { margin: 30, color: 'white', background: 'green', width:140, height:100,fontSize:30, borderRadius:10 } : { margin: 30, color: 'white', background: 'green', width:140, height:100, borderRadius:10} } onClick={handleDone}>{done ? "Snimi komandu" : "Dodaj"}</Button>
-                <Button style={{ margin:30 ,color: 'white', background: 'red', width:140, height:100, fontSize:30, borderRadius:10 }} onClick={deleteAll}>Obrisi!</Button>
+                <Button style={{ margin:30 ,color: 'white', background: 'red', width:140, height:100, fontSize:30, borderRadius:10 }} onClick={deleteAll}>Obriši</Button>
               </Box>
 
 

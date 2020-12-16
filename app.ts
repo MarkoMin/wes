@@ -67,7 +67,7 @@ app.get("/specify/:response", async (req, res) => {
     executeCommandID = Number(-1)
   }
   globalIndex=-1;
-  setTimeout(() => res.sendStatus(200), 15000);
+  setTimeout(() => res.sendStatus(200), 10000);
 });
 
 /* 
